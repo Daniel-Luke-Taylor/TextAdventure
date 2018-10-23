@@ -1,0 +1,65 @@
+body {
+    /*set font to Helvetica with sans-serif fall back, Helvetica was chosen as it was on the Hcschools list of most used fonts*/
+    font-family: "Helvetica", sans-serif;
+    font-size: 1em;
+    /*set the background colour to a dark grey*/
+    background: #292929;
+    /*overwrite the default margin and padding so the page doesn't have an ugly blank space*/
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    /*set a flexible size for the page without stretching too much on a very large screen that percents would do*/
+    max-width: 60em;
+    min-width: 20em;
+    /*center the page*/
+    margin-left: auto;
+    margin-right: auto;
+    /*push the page down so it doesn't overlap with the header*/
+    margin-top: 7em;
+    /*change the background of the page to a light grey*/
+    background: #CFCDCD;
+    /*add padding so the content does not touch the edges of the page*/
+    padding: 1em;
+    /*makes sure the page can resize to fit floats/all content*/
+    overflow: auto;
+}
+
+main {
+    /*set a flexible size for the page without stretching too much on a very large screen that percents would do*/
+    max-width: 60em;
+    min-width: 20em;
+    /*center the page*/
+    margin-left: auto;
+    margin-right: auto;
+    /*push the page down so it doesn't overlap with the header*/
+    margin-top: 7em;
+    /*change the background of the page to a light grey*/
+    background: #CFCDCD;
+    /*add padding so the content does not touch the edges of the page*/
+    padding: 1em;
+    /*makes sure the page can resize to fit floats/all content*/
+    overflow: auto;
+}
+
+article {
+     /*set a flexible size for the page without stretching too much on a very large screen that percents would do*/
+    max-width: 50em;
+    min-width: 10em;
+    /*center the page*/
+    margin-left: auto;
+    margin-right: auto;
+    /*push the page down so it doesn't overlap with the header*/
+    margin-top: 1em;
+    /*change the background of the page to a light grey*/
+    background: #000000;
+    /*add padding so the content does not touch the edges of the page*/
+    padding: 1em;
+    /*makes sure the page can resize to fit floats/all content*/
+    overflow: auto;
+}
+
+article p {
+    color: #20C20E;
+}

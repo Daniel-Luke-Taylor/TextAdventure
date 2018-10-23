@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+    <title>text adventure</title>
+    <meta charset="UTF-8">
+    <link href="mainstyle.css" rel="stylesheet" />
+</head>
+
+<body>
+    <main>
+        <article>
+        <p id="story"></p>
+        </article>
+        <br>
+        <label>What will you do:</label>
+        <select id="answer">
+        </select>
+        <button type="submit" onclick="doAction()">Go</button>
+    </main>
+    <script>
+        //set variables
+        var area;
+        var back;
+        var action;
+        var story;
+        var input;
+        var output;
+        var inventory = [];
+        var options = [];
+        var o; //options
+        var i; //inventory
+        var invCheck = false;
+        
+        //setup
+        area = "start";
+        input = document.getElementById("answer");
+        output = document.getElementById("story");
+        
+        playGame()
+
+        //get input and run area
+        function doAction() {
+            area = input.value
+            console.log(area);
+            playGame();
+        }
+        
+        //build options
+        function buildOption(){
+            input.innerHTML = "";
+            for(o=0; o<options.length; o++){
+                input.innerHTML += '<option value="' + options[o] + '">' + options[o].charAt(0).toUpperCase() + options[o].slice(1) + '</option>'
+            }
+        }
+        
+        //show inventory
+        function showInventory(){
+            if (inventory.length > 0){
+                story += "<br><br><hr><br>You have: ";
+                for (i=0; i<inventory.length; i++){
+                    if (i == inventory.length -1){
+                        story += inventory[i]
+                    }
+                    else{
+                        story += inventory[i] + ", "
+                    }
+                    
+                }
+            }
+        }
+        //changes extra story based on inventory contents
+        function inventoryCheck(item,part1,part2,used){
+            invCheck = false;
+            for(i=0; i<inventory.length; i++){
+                    if(inventory[i] == item){
+                        if(!used){
+                            options.pop();
+                        }
+                        invCheck = true;
+                    }
+                }
+            if(invCheck == true){
+                    story += part2;
+                    if(used){
+                        options.push("use " + item);
+                    }
+                }
+                else{
+                    story += part1;
+                }
+        }
+        //remove item
+        function removeItem(item){
+            for (i=0; i<inventory.length; i++){
+                if (inventory[i] == item){
+                    inventory.splice(i, 1);
+                }
+            }
+        }
+        
+        //build a screen/play game ---------------------------------------
+        function playGame(){
+            if (area == "start"){
+                back = area;
+                story = "There is a helpful sign welcoming you to the mountain trail. <br> It notes you can go forward towards the mountain base, or around towards a river.";
+                options = ["mountain base", "river", "hammer"];
+                inventoryCheck("hammer", "<br> There is a hammer by the base of the post. <br><br> >mountain base <br> >river <br> >hammer", "<br><br> >mountain base <br> >river", false)
+                showInventory();
+            }
+            else if(area == "mountain base") {
+                back = area;
+                story = "The mountain before you seems so mighty and that might only increases as you get closer to it.<br> A short ways up the mountain the climb only gets steeper, thankfully there is a trail with stone jutting out the mountain like stairs. <br>Looking around further you notice an oddly shaped indent in the mountain with overgrowth covering it.";
+                options = ["start", "trail", "overgrowth"];
+                showInventory();
+            }
+            else if(area == "river") {
+                back = area;
+                story = "As you get closer the crashing of the water gets louder, standing over the edge you realise the water is rapid and if you tried to cross you would surely be swept away.";
+                options = ["start", "glistening"];
+                inventoryCheck("chained key", "<br>However there is something glistening on the river bank.<br><br> >start<br> >glistening", "<br><br> >start", false);
+                showInventory();
+            }
+            else if(area == "hammer") {
+                story = "You pick up the hammer. It has quite a weight to it and feels good to hold. The handle is a little worn down giving it a slight dip where you hold it and the head of the hammer is a little loose but seems sturdy enough, just be careful swinging it.";
+                inventory.push("hammer");
+                options = ["back"];
+                showInventory();
+            }
+            else if(area == "trail") {
+                back = area;
+                story = "The trail keeps going and going. Halfway up the trail there is a flat plain. <br> There is a pile of ashes in the middle of a firepit, alongside this pit is a log on it's side.";
+                options = ["mountain base", "mountain top", "staff"];
+                inventoryCheck("staff", "<br> Leaning on the side of the log is a wooden staff. <br><br> >mountain base <br> >staff", "<br><br> >mountain base", false);
+                showInventory();
+            }
+            else if(area == "staff") {
+                story = "You walk over to the log. <br>The staff is slighty curved with a copper nail stuck in the base, otherwise it is fairly plain";
+                options = ["back"];
+                inventory.push("staff");
+                showInventory();
+            }
+            else if(area == "overgrowth") {
+                story = "The indent stretches back further behind the overgrown greenery. <br> The overgrowth is thick, you can barely see past it at all, let alone make it through bare handed.";
+                options = ["back"];
+                inventoryCheck("knife", "<br><br> >back", "<br><br> >back <br> >use knife", true);
+                showInventory();
+            }
+            else if(area == "glistening") {
+                story = "You lean over further, almost falling in the water. <br> The shiny object is far too deep to be within arm's reach.";
+                options = ["back"];
+                inventoryCheck("staff", "<br><br> >back", "<br>It seems like the staff you picked up might be able to reach it.<br><br> >back<br> >use staff", true);
+                showInventory();
+            }
+            else if(area == "use staff") {
+                story = "You lie flat on the riverside, reaching the staff into the water. <br> With a sharp flick you knock the glistening object out of the water beside you. <br> Unfortunately, you lose grip of the staff while you protect your face from the object flying through the air.";
+                options = ["back"];
+                removeItem("staff");
+                inventory.push("chained key");
+                showInventory();
+            }
+            else if(area == "mountain top") {
+                back = area;
+                story = "While walking up the path you come across a torn satchel.<br>Reaching the top of the mountain, you look behind you. Just looking back at the trail tires you out. <br> You cannot see the surrounding areas underneath the low fog that rolled in as you made the climb.<br> The fog seems almost alive.";
+                options = ["trail", "satchel"];
+                inventoryCheck("knife", "<br><br> >trail <br> >satchel", "<br><br> >trail", false);
+                showInventory();
+            }
+            else if(area == "satchel") {
+                story = "Upon inpection you find a pocket knife with a stained wood handle. You decide to take it.<br> There is nothing else here.";
+                options = ["back"];
+                inventory.push("knife");
+                showInventory();
+            }
+            else if(area == "use knife") {
+                back = area;
+                story = "Hacking through the vines is difficult, but you manage to make a big enough opening to squeeze through. <br> As you push through, the vines close up behind you, leaving you in the dark. The only light being small beams of light managing to weave through the overgrownth behind you. <br> As you feel around you find an old door with a rusty door handle.<br> The handle does not budge.";
+                options = ["mountain base"];
+                inventoryCheck("chained key", "<br><br> >mountain base", "<br><br> >mountain base <br> >use chained key", true);
+                showInventory();
+            }
+            else if(area == "use chained key") {
+                back = area;
+                story = "You stumble through the dark using the wall to orientate yourself. <br> You reach a big room with a dim glow from the ceiling, you pull your arm away from the wall and notice that you brought up ash that was resting on the wall.";
+                options = ["Glow"];
+                showInventory();
+            }
+            //back feature
+            else if(area == "back") {
+                area = back;
+                playGame();
+            }
+            //else {
+            //    story = "You stumble around for a while until you hear an //otherworldly voice call out to you. <br> 'Hello traveller, it seems as //though you have confused yourself with what is called a typo. Make sure //you enter the command exactly as it appears.'<br><br> >back"
+            //}
+            
+            buildOption();
+            //set output
+            output.innerHTML = story;
+            //console.log(back);
+            
+            //screen template
+            /*
+            else if(area == "area") {
+                back = area;
+                story = "story";
+                options = ["options"];
+                inventoryCheck();
+                showInventory();
+            }
+            */
+            
+        }
+    </script>
+</body>
+
+</html>
